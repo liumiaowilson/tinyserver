@@ -1,9 +1,12 @@
+const fs = require('fs');
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const parseLog = require('./logParser');
 const app = express();
 const port = 8000;
+
+const _token = fs.readFileSync('token', 'UTF-8');
 
 app.use(cors());
 app.use(bodyParser.json()); // support json encoded bodies
@@ -19,6 +22,14 @@ app.get('/version', async (req, res) => {
 app.post('/automation', async (req, res) => {
     const code = req.body.code;
     const data = req.body.data;
+    const token = req.body.token;
+
+    if(_token !== token) {
+        return res.json({
+            success: false,
+            message: 'Invalid token',
+        });
+    }
 
     let $data = {};
     try {
