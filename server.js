@@ -19,6 +19,11 @@ app.get('/version', async (req, res) => {
     });
 });
 
+app.get('/log', async (req, res) => {
+    res.type('text/plain');
+    res.send(fs.readFileSync('server.log', 'UTF-8'));
+});
+
 app.post('/automation', async (req, res) => {
     const code = req.body.code;
     const data = req.body.data;
