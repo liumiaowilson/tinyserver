@@ -6,7 +6,7 @@ const parseLog = require('./logParser');
 const app = express();
 const port = 8000;
 
-const _token = fs.readFileSync('token', 'UTF-8');
+const _token = fs.readFileSync('token', 'UTF-8').trim();
 
 app.use(cors());
 app.use(bodyParser.json()); // support json encoded bodies
@@ -24,7 +24,7 @@ app.post('/automation', async (req, res) => {
     const data = req.body.data;
     const token = req.body.token;
 
-    if(_token !== token) {
+    if(!token || _token !== token.trim()) {
         return res.json({
             success: false,
             message: 'Invalid token',
