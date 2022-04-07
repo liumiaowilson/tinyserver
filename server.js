@@ -24,6 +24,19 @@ app.get('/log', async (req, res) => {
     res.send(fs.readFileSync('server.log', 'UTF-8'));
 });
 
+app.get('/trimLog', async (req, res) => {
+    const content = fs.readFileSync('server.log', 'UTF-8');
+    const lines = content.split('\n');
+    if(lines.length > 2000) {
+        const newContent = lines.slice(lines.length - 2000).join('\n');
+        fs.writeFileSync('server.log', newContent, 'UTF-8');
+    }
+
+    return res.json({
+        success: true,
+    });
+});
+
 app.post('/automation', async (req, res) => {
     const code = req.body.code;
     const data = req.body.data;
